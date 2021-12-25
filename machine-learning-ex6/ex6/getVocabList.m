@@ -1,0 +1,41 @@
+function [vocabList, wordCounter] = getVocabList(vocListFile,fileformat)
+  %GETVOCABLIST reads the fixed vocabulary list in vocab.txt and returns a
+  %cell array of the words
+  %   vocabList = GETVOCABLIST() reads the fixed vocabulary list in vocab.txt 
+  %   and returns a cell array of the words in vocabList.
+  %   fileformat = 1 (usual format)
+  %   fileformat = 2 (new format with 3-rf column : word counter)
+
+  %% Read the fixed vocabulary list
+  fid = fopen(vocListFile);
+
+  % Store all dictionary words in cell array vocab{}
+  %n = 1899;  % Total number of words in the dictionary
+
+  % For ease of implementation, we use a struct to map the strings => integers
+  % In practice, you'll want to use some form of hashmap
+  %vocabList = cell(n, 1);
+
+  i=1;
+  while (fscanf(fid, '%d', 1))
+    vocabList{i} = fscanf(fid, '%s', 1);
+    if(fileformat == 2)
+      wordCounter(i,1) = fscanf(fid, '%d', 1);
+    endif
+    %printf("%s\n",vocabList{i});
+    %for i = 1:n
+    %    % Word Index (can ignore since it will be = i)
+    %    fscanf(fid, '%d', 1);
+    %    % Actual Word
+    %    vocabList{i} = fscanf(fid, '%s', 1);
+    %    %printf("%s\n",vocabList{i});
+    %end
+    i=i+1;
+  endwhile
+  fclose(fid);
+  
+  if(fileformat == 1)
+    wordCounter=ones(length(vocabList),1);
+  endif
+  
+end
